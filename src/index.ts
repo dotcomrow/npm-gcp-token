@@ -7,7 +7,7 @@ interface ServiceAccountKey {
   private_key: string;
 }
 
-export class GCPAccessToken {
+export default class GCPAccessToken {
   private keyFileContent: string;
   private token: string;
   private tokenExpiry: number | null;
