@@ -8,7 +8,7 @@ permissions: write-all
 jobs:
   tag-npm-release:
     name: Tag new npm package releases
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3

@@ -1,5 +1,4 @@
 import { JWTHeaderParameters, JWTPayload, SignJWT, importPKCS8 } from 'jose'
-// import * as https from "https"
 import axios from 'axios';
 import { Buffer } from 'buffer';
 import AccessToken from './AccessToken.js';
@@ -25,7 +24,7 @@ export default class GCPAccessToken {
             .sign(key);
     }
 
-    private httprequest(postData: string) {
+    private http_request(postData: string) {
         const reqBody = 'grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=' + postData;
         return axios.post('https://oauth2.googleapis.com/token', reqBody, {
             headers: {
@@ -70,7 +69,7 @@ export default class GCPAccessToken {
 
         const jwt = await this.createJWT(header, payload, keyFile.private_key)
         
-        await this.httprequest(jwt).then((data: any) => {
+        await this.http_request(jwt).then((data: any) => {
             this.token = new AccessToken(data.access_token, data.expires_in, data.token_type);
         });
 
