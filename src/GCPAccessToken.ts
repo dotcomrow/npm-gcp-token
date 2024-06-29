@@ -24,6 +24,7 @@ export default class GCPAccessToken {
     }
 
     private httprequest(postData: string) {
+        const reqBody = 'grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=' + postData;
         return new Promise((resolve, reject) => {
             var options = {
                 hostname: 'oauth2.googleapis.com',
@@ -32,11 +33,12 @@ export default class GCPAccessToken {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
-                    'Content-Length': postData.length
+                    'Content-Length': Buffer.byteLength(reqBody)
                 }
             };
             const req = https.request(options, (res) => {
                 if (res.statusCode == null || (res.statusCode < 200 || res.statusCode >= 300)) {
+                    console.log(req)
                     return reject(new Error('statusCode=' + res.statusCode));
                 }
 
@@ -56,7 +58,7 @@ export default class GCPAccessToken {
             req.on('error', (e) => {
                 reject(e.message);
             });
-            req.write(postData);
+            req.write(reqBody);
             req.end();
         });
     }
@@ -90,9 +92,8 @@ export default class GCPAccessToken {
         };
 
         const jwt = await this.createJWT(header, payload, keyFile.private_key)
-        var postData = `grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=${jwt}`;
-
-        await this.httprequest(postData).then((data: any) => {
+        
+        await this.httprequest(jwt).then((data: any) => {
             this.token = new AccessToken(data.access_token, data.expires_in, data.token_type);
         });
 
