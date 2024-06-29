@@ -1,5 +1,6 @@
 import { JWTHeaderParameters, JWTPayload, SignJWT, importPKCS8 } from 'jose'
 import * as https from "https"
+import { Buffer } from 'buffer';
 import AccessToken from './AccessToken.js';
 
 interface ServiceAccountKey {
