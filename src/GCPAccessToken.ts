@@ -38,42 +38,6 @@ export default class GCPAccessToken {
             console.log(err);
             return err;
         });
-        // return new Promise((resolve, reject) => {
-        //     var options = {
-        //         hostname: 'oauth2.googleapis.com',
-        //         port: 443,
-        //         path: '/token',
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/x-www-form-urlencoded',
-        //             'Content-Length': Buffer.byteLength(reqBody)
-        //         }
-        //     };
-        //     const req = https.request(options, (res) => {
-        //         if (res.statusCode == null || (res.statusCode < 200 || res.statusCode >= 300)) {
-        //             console.log(req)
-        //             return reject(new Error('statusCode=' + res.statusCode));
-        //         }
-
-        //         const body: Buffer[] = []
-        //         var resString = '';
-        //         res.on('data', (chunk) => body.push(chunk))
-        //         res.on('end', () => {
-        //             try {
-        //                 resString = JSON.parse(Buffer.concat(body).toString());
-        //             } catch(e) {
-        //                 console.log(e);
-        //                 reject(e);
-        //             }
-        //             resolve(resString);
-        //         })
-        //     });
-        //     req.on('error', (e) => {
-        //         reject(e.message);
-        //     });
-        //     req.write(reqBody);
-        //     req.end();
-        // });
     }
 
     public async getAccessToken(scope: string): Promise<AccessToken> {
