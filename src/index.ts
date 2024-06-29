@@ -1,6 +1,5 @@
-import axios from 'axios';
-import fetchAdapter from "@haverstack/axios-fetch-adapter";
 import { JWTHeaderParameters, JWTPayload, SignJWT, importPKCS8 } from 'jose'
+import * as https from "https"
 
 interface ServiceAccountKey {
   client_email: string;
@@ -54,16 +53,51 @@ export default class GCPAccessToken {
 
     const jwt = await this.createJWT(header, payload, keyFile.private_key);
 
-    const client = axios.create({
-      adapter: fetchAdapter
+    
+  var postData = `grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=${jwt}`;
+  
+  var options = {
+    hostname: 'oauth2.googleapis.com',
+    port: 443,
+    path: '/token',
+    method: 'POST',
+    headers: {
+         'Content-Type': 'application/x-www-form-urlencoded',
+         'Content-Length': postData.length
+       }
+  };
+  
+  var req = https.request(options, (res) => {
+    console.log('statusCode:', res.statusCode);
+    console.log('headers:', res.headers);
+  
+    res.on('data', (d) => {
+      process.stdout.write(d);
     });
-    const response = await client.post('https://oauth2.googleapis.com/token', {
-      grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-      assertion: jwt,
-    });
+  });
+  
+  req.on('error', (e) => {
+    console.error(e);
+  });
+  
+  req.write(postData);
+  req.end();
 
-    this.token = response.data.access_token;
-    this.tokenExpiry = exp * 1000;
+
+
+    // fetch('https://oauth2.googleapis.com/token', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/x-www-form-urlencoded',
+    //   },
+    //   body: `grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=${jwt}`,
+    // })
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     this.token = data.access_token;
+    //     this.tokenExpiry = exp * 1000;
+    //   })
+    //   .catch(error => console.error(error));
 
     return this.token;
   }

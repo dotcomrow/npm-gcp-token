@@ -1,4 +1,4 @@
-import GCPAccessToken from '../src/index';
+import GCPAccessToken from '../src/index.js';
 import * as fs from 'fs';
 
 const keyFilePath = '/Users/admin/Downloads/logging-test-key.json'; // replace with the path to your service account key file
