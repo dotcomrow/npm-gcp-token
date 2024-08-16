@@ -20,7 +20,7 @@
     "dependencies": {
         "jose": "^5.4.1",
         "buffer": "^6.0.3",
-        "axios": "^1.7.4"
+        "axios": "^1.7.2"
     },
     "devDependencies": {
         "@types/node": "^15.12.2",
