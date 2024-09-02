@@ -31,7 +31,7 @@ export default class GCPAccessToken {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'Content-Length': Buffer.byteLength(reqBody)
             },
-            withCredentials: false
+            withCredentials: undefined
         }).then((res) => {
             return res.data;
         }).catch((err) => {
